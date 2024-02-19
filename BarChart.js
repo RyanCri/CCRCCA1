@@ -9,6 +9,7 @@ class BarChart{
         this.yPos = obj.yPos
         this.axisColour = obj.axisColour;
         this.barColour = obj.barColour;
+        this.compareBarColour = obj.compareBarColour;
         this.strokeWeight = obj.sW;
         this.barWidth = obj.barWidth;
         this.labelTextSize = obj.labelTextSize;
@@ -26,12 +27,29 @@ class BarChart{
         line(0, 0, 0, -this.chartHeight);
         line(0, 0, this.chartWidth, 0);
 
-        let numberOfBars = this.data.length;
+        let numberOfBars;
 
         let totals = this.data.map((row => +row[this.yValue]));
-        let maxVal = max(totals);
         let scale;
         let gap;
+
+        let colTotal;
+        let stack1 = [];
+
+        if (this.chartType == "Stacked") {
+            totals = [];
+            numberOfBars = this.data.length
+            for (i = 0; i<numberOfBars; i++) {
+                colTotal = this.data[i].map((row => +row[this.yValue]))
+                stack1.push(colTotal[0])
+                let total = colTotal[0] + colTotal[1];
+                totals.push(total)
+            }
+        } else {
+            numberOfBars = this.data.length;
+        }
+
+        let maxVal = max(totals);
 
         if (this.chartType == "Horizontal") {
             scale = this.chartWidth / maxVal;
@@ -88,6 +106,46 @@ class BarChart{
                 fill(this.barColour);
                 rect(0, 0, this.barWidth, -this.data[i][this.yValue] * scale);
                 
+                // draws labels
+                textSize(this.labelTextSize);
+                push();
+                noStroke();
+                translate(this.barWidth / 2, 0);
+                rotate(this.labelRotation);
+                fill(this.labelColour);
+                textAlign(LEFT, CENTER)
+                text (labels[i], this.labelPadding, 0)
+                pop();
+
+                translate(gap+this.barWidth, 0);
+            }
+            pop();
+
+            // this draws the vertical elements
+            let tickGap = this.chartHeight / 5
+            let tickValue = maxVal / 5
+            for (let i = 0; i <= 5; i++) {
+                stroke(255);
+                line(0, -i*tickGap, -20, -i*tickGap)
+                textSize(this.labelTextSize)
+                textAlign(RIGHT, CENTER)
+                noStroke();
+                fill(this.labelColour);
+                text(round(tickValue*i, 2), -20, -i*tickGap)
+            }
+
+            pop();
+        } else if (this.chartType == "Stacked") {
+            translate(gap, 0);
+            let h;
+            for (let i = 0; i < numberOfBars; i++) {
+                let col = this.data[i];
+                fill(this.barColour);
+                console.log(stack1)
+                rect(0, 0, this.barWidth, -totals[i] * scale);
+                fill(this.compareBarColour);
+                rect(0, 0, this.barWidth, -stack1[i] * scale)            
+
                 // draws labels
                 textSize(this.labelTextSize);
                 push();
