@@ -118,14 +118,32 @@ function setup() {
     chartType:"100%",
   }
 
-  charts.push(new BarChart(vBarChart));
+  lBarChart = {
+    data:bothHLY,
+    yValue:"VALUE",
+    xValue:"Year",
+    chartWidth:400,
+    chartHeight:400,
+    xPos:600,
+    yPos:950,
+    axisColour:"#ffffff",
+    barColour:"#ffff00",
+    sW:2,
+    barWidth:15,
+    labelTextSize:20,
+    labelPadding:10,
+    labelColour:"#ff00ff",
+    labelRotation:PI/2,
+    chartType:"Line"
+  }
 
+  charts.push(new BarChart(vBarChart));
 
   charts.push(new BarChart(hBarChart));
 
   charts.push(new BarChart(sBarChart));
 
-  charts.push(new BarChart(bBarChart));
+  charts.push(new BarChart(lBarChart));
 
   charts.forEach(chart => chart.render());
 }

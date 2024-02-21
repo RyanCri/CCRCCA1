@@ -217,6 +217,68 @@ class BarChart{
             }
 
             pop();
+        } else if (this.chartType == "Line") {
+            translate(-20, 0)
+            push();
+            translate(-this.chartWidth + 20 + gap, 0);
+
+            strokeWeight(5)
+            fill(255)
+            beginShape(LINES);
+            let points = []
+            points[0] = createVector(gap, -this.data[0][this.yValue] * scale);
+            // console.log(points[0])
+            vertex(gap, -this.data[0][this.yValue] * scale)
+            for (let i = 1; i < numberOfBars; i++) {
+                fill(this.barColour);
+
+                let prev = points[i-1];
+                let h = this.data[i][this.yValue] * scale;
+                let diff = h - (this.data[i-1][this.yValue] * scale)
+                points[i] = prev.add(createVector((this.barWidth + gap), (-diff)));
+                console.log(points[0])
+                vertex(prev.x, prev.y);
+                vertex(points[i].x, points[i].y);
+            }
+            
+            for (let i = 0; i < numberOfBars; i++) {
+
+                // draws labels
+                push();
+                translate(this.chartWidth, 0)
+                // rect(50, 600, 0)
+                textSize(this.labelTextSize);
+                push();
+                noStroke();
+                translate(this.barWidth / 2, 0);
+                rotate(this.labelRotation);
+                fill(this.labelColour);
+                textAlign(LEFT, CENTER)
+                text (labels[i], this.labelPadding, 0)
+                pop();
+                pop();
+
+                translate(gap+this.barWidth, 0);
+            }
+            endShape()
+            pop();
+            pop();
+
+            // this draws the vertical elements
+            let tickGap = this.chartHeight / 5
+            let tickValue = maxVal / 5
+            for (let i = 0; i <= 5; i++) {
+                stroke(255);
+                line(0, -i*tickGap, -20, -i*tickGap)
+                textSize(this.labelTextSize)
+                textAlign(RIGHT, CENTER)
+                noStroke();
+                fill(this.labelColour);
+                text(round(tickValue*i, 2), -20, -i*tickGap)
+            }
+
+
+            pop();
         }
     }
 }
