@@ -36,12 +36,16 @@ class BarChart{
         let colTotal;
         let stack1 = [];
 
+        let labels = this.data.map(d => d[this.xValue])
+
         if (this.chartType == "Stacked" || this.chartType == "100%") {
             totals = [];
+            labels = [];
             numberOfBars = this.data.length
             for (i = 0; i<numberOfBars; i++) {
                 colTotal = this.data[i].map((row => +row[this.yValue]))
                 stack1.push(colTotal[0])
+                labels.push(this.data[i][0][this.xValue])
                 let total = colTotal[0] + colTotal[1];
                 totals.push(total)
             }
@@ -58,8 +62,6 @@ class BarChart{
             scale = this.chartHeight / maxVal;
             gap = (this.chartWidth -(numberOfBars * this.barWidth)) / (numberOfBars + 1);
         }
-
-        let labels = this.data.map(d => d[this.xValue])
 
         // draws the bars, vertical or horizontal
         push()
@@ -141,7 +143,6 @@ class BarChart{
             for (let i = 0; i < numberOfBars; i++) {
                 let col = this.data[i];
                 fill(this.barColour);
-                console.log(stack1)
                 rect(0, 0, this.barWidth, -totals[i] * scale);
                 fill(this.compareBarColour);
                 rect(0, 0, this.barWidth, -stack1[i] * scale)            
@@ -184,12 +185,9 @@ class BarChart{
                 percent = (stack1[i] / totals[i]) * 100;
                 h = (this.chartHeight / 100) * percent;
                 fill(this.barColour);
-                console.log(stack1)
                 rect(0, 0, this.barWidth, -this.chartHeight);
                 fill(this.compareBarColour);
                 rect(0, 0, this.barWidth, -h)            
-
-                console.log((stack1[i] / totals[i]) * 100)
                 // draws labels
                 textSize(this.labelTextSize);
                 push();

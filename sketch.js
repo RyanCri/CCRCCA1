@@ -28,6 +28,7 @@ function setup() {
   bothHLY = cleanHLY.filter(sex => sex.Sex == "Both sexes");
   combinedHLY = cleanHLY.filter(sex => sex.Sex == "Male" || sex.Sex == "Female");
 
+  // used for stacked bar chart adn 100%
   let Male;
   let Female;
 
@@ -95,7 +96,6 @@ function setup() {
     labelColour:"#ff00ff",
     labelRotation:PI/2,
     chartType:"Stacked",
-    stackedLabel:"YEAR"
   }
 
   bBarChart = {
@@ -117,7 +117,6 @@ function setup() {
     labelRotation:PI/2,
     chartType:"100%",
   }
-
 
   charts.push(new BarChart(vBarChart));
 
