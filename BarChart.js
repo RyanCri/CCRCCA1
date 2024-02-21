@@ -36,7 +36,7 @@ class BarChart{
         let colTotal;
         let stack1 = [];
 
-        if (this.chartType == "Stacked") {
+        if (this.chartType == "Stacked" || this.chartType == "100%") {
             totals = [];
             numberOfBars = this.data.length
             for (i = 0; i<numberOfBars; i++) {
@@ -165,6 +165,50 @@ class BarChart{
             let tickGap = this.chartHeight / 5
             let tickValue = maxVal / 5
             for (let i = 0; i <= 5; i++) {
+                stroke(255);
+                line(0, -i*tickGap, -20, -i*tickGap)
+                textSize(this.labelTextSize)
+                textAlign(RIGHT, CENTER)
+                noStroke();
+                fill(this.labelColour);
+                text(round(tickValue*i, 2), -20, -i*tickGap)
+            }
+
+            pop();
+        } else if (this.chartType == "100%") {
+            translate(gap, 0);
+            let percent;
+            let h;
+            for (let i = 0; i < numberOfBars; i++) {
+                let col = this.data[i];
+                percent = (stack1[i] / totals[i]) * 100;
+                h = (this.chartHeight / 100) * percent;
+                fill(this.barColour);
+                console.log(stack1)
+                rect(0, 0, this.barWidth, -this.chartHeight);
+                fill(this.compareBarColour);
+                rect(0, 0, this.barWidth, -h)            
+
+                console.log((stack1[i] / totals[i]) * 100)
+                // draws labels
+                textSize(this.labelTextSize);
+                push();
+                noStroke();
+                translate(this.barWidth / 2, 0);
+                rotate(this.labelRotation);
+                fill(this.labelColour);
+                textAlign(LEFT, CENTER)
+                text (labels[i], this.labelPadding, 0)
+                pop();
+
+                translate(gap+this.barWidth, 0);
+            }
+            pop();
+
+            // this draws the vertical elements
+            let tickGap = this.chartHeight / 4
+            let tickValue = 100 / 4
+            for (let i = 0; i <= 4; i++) {
                 stroke(255);
                 line(0, -i*tickGap, -20, -i*tickGap)
                 textSize(this.labelTextSize)

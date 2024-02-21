@@ -95,7 +95,29 @@ function setup() {
     labelColour:"#ff00ff",
     labelRotation:PI/2,
     chartType:"Stacked",
+    stackedLabel:"YEAR"
   }
+
+  bBarChart = {
+    data:cleanCombinedHLY,
+    yValue:"VALUE",
+    xValue:"Year",
+    chartWidth:400,
+    chartHeight:400,
+    xPos:600,
+    yPos:950,
+    axisColour:"#ffffff",
+    barColour:"#3cff00",
+    compareBarColour:"#1e00ff",
+    sW:2,
+    barWidth:15,
+    labelTextSize:20,
+    labelPadding:10,
+    labelColour:"#ff00ff",
+    labelRotation:PI/2,
+    chartType:"100%",
+  }
+
 
   charts.push(new BarChart(vBarChart));
 
@@ -103,6 +125,8 @@ function setup() {
   charts.push(new BarChart(hBarChart));
 
   charts.push(new BarChart(sBarChart));
+
+  charts.push(new BarChart(bBarChart));
 
   charts.forEach(chart => chart.render());
 }
