@@ -46,16 +46,28 @@ class BarChart{
 
         let colTotal;
         let stack1 = [];
+        let allVal = [];
+        let sepVal = [[],[]];
 
         let labels = this.data.map(d => d[this.xValue])
-        console.log(this.data)
 
-        if (this.chartType == "Stacked" || this.chartType == "100%") {
+        if (this.chartType == "Stacked" || this.chartType == "100%" || this.chartType == "Grouped") {
+            // console.log(this.data)
+
+
             totals = [];
             labels = [];
             numberOfBars = this.data.length
             for (i = 0; i<numberOfBars; i++) {
+                for (let j = 0; j < this.data[i].length; j++) {
+                    allVal.push(this.data[i][j][this.yValue])
+
+                    sepVal[j].push(this.data[i][j][this.yValue])
+                    // console.log(sepVal)
+                }
+
                 colTotal = this.data[i].map((row => +row[this.yValue]))
+                // allVal.push(colTotal[i]);
                 stack1.push(colTotal[0])
                 labels.push(this.data[i][0][this.xValue])
                 let total = 0;
@@ -90,6 +102,10 @@ class BarChart{
         if (this.chartType == "Horizontal") {
             scale = this.chartWidth / maxVal;
             gap = (this.chartHeight -(numberOfBars * this.barWidth)) / (numberOfBars + 1);
+        } else if (this.chartType == "Grouped" || this.chartType == "Stacked" || this.chartType == "100%") {
+            maxVal = max(allVal);
+            scale = this.chartHeight / maxVal;
+            gap = (this.chartWidth -(numberOfBars * this.barWidth)) / (numberOfBars + 1);
         } else {
             scale = this.chartHeight / maxVal;
             gap = (this.chartWidth -(numberOfBars * this.barWidth)) / (numberOfBars + 1);
@@ -171,13 +187,14 @@ class BarChart{
             pop();
         } else if (this.chartType == "Stacked") {
             translate(gap, 0);
+            console.log(maxVal)
             let h;
             for (let i = 0; i < numberOfBars; i++) {
                 let col = this.data[i];
                 fill(this.barColour[0]);
-                rect(0, 0, this.barWidth, -totals[i] * scale);
+                rect(0, 0, this.barWidth, -sepVal[1][i] * scale);
                 fill(this.barColour[1]);
-                rect(0, 0, this.barWidth, -stack1[i] * scale)            
+                rect(0, 0, this.barWidth, -sepVal[0][i] * scale)            
 
                 // draws labels
                 textSize(this.labelTextSize);
@@ -240,6 +257,50 @@ class BarChart{
             let tickValue = 100 / 4
             for (let i = 0; i <= 4; i++) {
                 stroke(255);
+                line(0, -i*tickGap, -20, -i*tickGap)
+                textSize(this.labelTextSize)
+                textAlign(RIGHT, CENTER)
+                noStroke();
+                fill(this.labelColour);
+                text(round(tickValue*i, 2), -20, -i*tickGap)
+            }
+
+            pop();
+        } else if (this.chartType == "Grouped") {
+            gap = gap /2;
+            translate(gap, 0);
+            let h;
+            for (let i = 0; i < numberOfBars; i++) {
+                let col = this.data[i];
+                fill(this.barColour[0]);
+                rect(0, 0, this.barWidth, -(totals[i] - stack1[i]) * scale);
+                // console.log(totals[i])
+                translate(this.barWidth, 0)
+                fill(this.barColour[1]);
+                rect(0, 0, this.barWidth, -stack1[i] * scale)            
+
+                // draws labels
+                textSize(this.labelTextSize);
+                push();
+                noStroke();
+                translate(this.barWidth / 2, 0);
+                rotate(this.labelRotation);
+                fill(this.labelColour);
+                textAlign(LEFT, CENTER)
+                text (labels[i], this.labelPadding, 0)
+                pop();
+
+                translate(gap+this.barWidth, 0);
+            }
+            pop();
+
+            // this draws the vertical elements
+            let tickGap = this.chartHeight / 5
+            let tickValue = maxVal / 5
+            for (let i = 0; i <= 5; i++) {
+                stroke(255);
+                line(0, -i*tickGap, this.chartWidth, -i*tickGap)
+
                 line(0, -i*tickGap, -20, -i*tickGap)
                 textSize(this.labelTextSize)
                 textAlign(RIGHT, CENTER)

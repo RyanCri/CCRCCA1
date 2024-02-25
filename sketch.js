@@ -34,6 +34,7 @@ function setup() {
 
   bothHLY = cleanHLY.filter(sex => sex.Sex == "Both sexes");
   combinedHLY = cleanHLY.filter(sex => sex.Sex == "Male" || sex.Sex == "Female");
+  irelandST = cleanST.filter(country => country.Countries == "Ireland")
 
   // used for stacked bar chart adn 100%
   let Male;
@@ -151,15 +152,60 @@ function setup() {
     chartType:"Line"
   }
 
+  gBarChart = {
+    data:cleanCombinedHLY,
+    yValue:"VALUE",
+    xValue:"Year",
+    chartWidth:400,
+    chartHeight:400,
+    xPos:1300,
+    yPos:1150,
+    axisColour:"#ffffff",
+    barColour:["#ff0f0f", "#1e00ff"],
+    sW:2,
+    barWidth:15,
+    labelTextSize:20,
+    labelPadding:10,
+    labelColour:"#ffffff",
+    labelRotation:PI/2,
+    title:"Trend of healthy living years after the age of 65\nthroughout the last decade",
+    chartType:"Grouped",
+    legend:["Male", "Female"]
+  }
+
+  iSBarChart = {
+    data:irelandST,
+    yValue:"VALUE",
+    xValue:"Year",
+    chartWidth:400,
+    chartHeight:400,
+    xPos:100,
+    yPos:1150,
+    axisColour:"#ffffff",
+    barColour:["#ff0f0f", "#1e00ff"],
+    compareBarColour:"#1e00ff",
+    sW:2,
+    barWidth:15,
+    labelTextSize:20,
+    labelPadding:10,
+    labelColour:"#ffffff",
+    labelRotation:PI/2,
+    chartType:"Stacked",
+    title:"Healthy Living Years after the age of 65 over\nthe last decade, separated by Male and Female",
+    legend:["Male", "Female"]
+  }
+
   charts.push(new BarChart(vBarChart));
 
   charts.push(new BarChart(hBarChart));
 
-  charts.push(new BarChart(sBarChart));
+  charts.push(new BarChart(iSBarChart));
 
   charts.push(new BarChart(lBarChart));
 
   charts.push(new BarChart(bBarChart));
+
+  charts.push(new BarChart(gBarChart));
 
   charts.forEach(chart => chart.render());
 }
