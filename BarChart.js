@@ -17,6 +17,8 @@ class BarChart{
         this.labelColour = obj.labelColour;
         this.labelRotation = obj.labelRotation;
         this.chartType = obj.chartType;
+        this.title = obj.title;
+        this.legend = obj.legend;
     }
 
     render(){
@@ -26,6 +28,15 @@ class BarChart{
         translate(this.xPos, this.yPos);
         line(0, 0, 0, -this.chartHeight);
         line(0, 0, this.chartWidth, 0);
+
+        push();
+        translate(this.chartWidth / 2, -this.chartHeight - 70);
+        textAlign(CENTER)
+        noStroke()
+        fill(255)
+        textSize(20)
+        text(this.title, 0, 0)
+        pop();
 
         let numberOfBars;
 
@@ -37,6 +48,7 @@ class BarChart{
         let stack1 = [];
 
         let labels = this.data.map(d => d[this.xValue])
+        console.log(this.data)
 
         if (this.chartType == "Stacked" || this.chartType == "100%") {
             totals = [];
@@ -46,8 +58,28 @@ class BarChart{
                 colTotal = this.data[i].map((row => +row[this.yValue]))
                 stack1.push(colTotal[0])
                 labels.push(this.data[i][0][this.xValue])
-                let total = colTotal[0] + colTotal[1];
+                let total = 0;
+                for (let j = 0; j < colTotal.length; j++) {
+                    total += colTotal[j]
+                }
+                // let total = colTotal[0] + colTotal[1];
                 totals.push(total)
+            }
+
+            // this code draws the legend with the squares and colours and names
+            for (i = 0; i < this.legend.length; i++) {
+                push();
+                translate(this.chartWidth / 3, 100)
+                
+                fill(this.barColour[i])
+                rectMode(CENTER)
+                rect(100*i - 20, -8, 20)
+
+                textSize(20)
+                fill(255)
+                noStroke()
+                text(this.legend[i], 100*i, 0)
+                pop();
             }
         } else {
             numberOfBars = this.data.length;
@@ -142,9 +174,9 @@ class BarChart{
             let h;
             for (let i = 0; i < numberOfBars; i++) {
                 let col = this.data[i];
-                fill(this.barColour);
+                fill(this.barColour[0]);
                 rect(0, 0, this.barWidth, -totals[i] * scale);
-                fill(this.compareBarColour);
+                fill(this.barColour[1]);
                 rect(0, 0, this.barWidth, -stack1[i] * scale)            
 
                 // draws labels
@@ -184,9 +216,9 @@ class BarChart{
                 let col = this.data[i];
                 percent = (stack1[i] / totals[i]) * 100;
                 h = (this.chartHeight / 100) * percent;
-                fill(this.barColour);
+                fill(this.barColour[0]);
                 rect(0, 0, this.barWidth, -this.chartHeight);
-                fill(this.compareBarColour);
+                fill(this.barColour[1]);
                 rect(0, 0, this.barWidth, -h)            
                 // draws labels
                 textSize(this.labelTextSize);
@@ -236,7 +268,6 @@ class BarChart{
                 let h = this.data[i][this.yValue] * scale;
                 let diff = h - (this.data[i-1][this.yValue] * scale)
                 points[i] = prev.add(createVector((this.barWidth + gap), (-diff)));
-                console.log(points[0])
                 vertex(prev.x, prev.y);
                 vertex(points[i].x, points[i].y);
             }
@@ -268,8 +299,11 @@ class BarChart{
             let tickGap = this.chartHeight / 5
             let tickValue = maxVal / 5
             for (let i = 0; i <= 5; i++) {
+                stroke(100)
+                line(0, -i*tickGap, this.chartWidth, -i*tickGap)
                 stroke(255);
                 line(0, -i*tickGap, -20, -i*tickGap)
+                
                 textSize(this.labelTextSize)
                 textAlign(RIGHT, CENTER)
                 noStroke();
