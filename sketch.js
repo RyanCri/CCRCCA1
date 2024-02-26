@@ -9,6 +9,7 @@ let cleanST = [];
 let bothHLY = [];
 
 let cleanCombinedHLY = []
+let cleanIrelandST = []
 
 let numHLY;
 
@@ -39,6 +40,17 @@ function setup() {
   // used for stacked bar chart adn 100%
   let Male;
   let Female;
+
+  let prim;
+  let sec;
+
+  for (i = 0; i < irelandST.length; i += 3) {
+    prim = irelandST[i];
+    sec = irelandST[i+2];
+    yupSendIt = [prim, sec];
+
+    cleanIrelandST.push(yupSendIt);
+  }
 
   for (i = 0; i < combinedHLY.length; i += 2) {
     Male = combinedHLY[i];
@@ -111,8 +123,8 @@ function setup() {
   }
 
   bBarChart = {
-    data:cleanCombinedHLY,
-    yValue:"VALUE",
+    data:cleanIrelandST,
+    yValue:"Ratio of students to teachers (Ratio)",
     xValue:"Year",
     chartWidth:400,
     chartHeight:400,
@@ -128,8 +140,8 @@ function setup() {
     labelColour:"#ffffff",
     labelRotation:PI/2,
     chartType:"100%",
-    title:"Healthy Living Years after the age of 65 over\nthe last decade, Male v Female Ratio",
-    legend:["Male", "Female"]
+    title:"Ratio of students to teachers, primary v secondary",
+    legend:["Prim.", "Sec."]
   }
 
   lBarChart = {
@@ -174,8 +186,8 @@ function setup() {
   }
 
   iSBarChart = {
-    data:irelandST,
-    yValue:"VALUE",
+    data:cleanIrelandST,
+    yValue:"Ratio of students to teachers (Ratio)",
     xValue:"Year",
     chartWidth:400,
     chartHeight:400,
@@ -191,8 +203,8 @@ function setup() {
     labelColour:"#ffffff",
     labelRotation:PI/2,
     chartType:"Stacked",
-    title:"Healthy Living Years after the age of 65 over\nthe last decade, separated by Male and Female",
-    legend:["Male", "Female"]
+    title:"Number of students to teachers in Ireland",
+    legend:["Prim.", "Sec."]
   }
 
   charts.push(new BarChart(vBarChart));

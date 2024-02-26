@@ -66,6 +66,7 @@ class BarChart{
                     // console.log(sepVal)
                 }
 
+                // console.log(this.data[i])
                 colTotal = this.data[i].map((row => +row[this.yValue]))
                 // allVal.push(colTotal[i]);
                 stack1.push(colTotal[0])
@@ -103,8 +104,10 @@ class BarChart{
             scale = this.chartWidth / maxVal;
             gap = (this.chartHeight -(numberOfBars * this.barWidth)) / (numberOfBars + 1);
         } else if (this.chartType == "Grouped" || this.chartType == "Stacked" || this.chartType == "100%") {
-            maxVal = max(allVal);
-            scale = this.chartHeight / maxVal;
+            maxVal = floor(max(allVal));
+            scale = this.chartHeight / floor(maxVal);
+            // scale = this.chartHeight / maxVal;
+
             gap = (this.chartWidth -(numberOfBars * this.barWidth)) / (numberOfBars + 1);
         } else {
             scale = this.chartHeight / maxVal;
@@ -154,7 +157,7 @@ class BarChart{
             translate(gap, 0);
             for (let i = 0; i < numberOfBars; i++) {
                 fill(this.barColour);
-                rect(0, 0, this.barWidth, -this.data[i][this.yValue] * scale);
+                rect(0, 0, this.barWidth, -this.data[i][this.yValue] * scale);                
                 
                 // draws labels
                 textSize(this.labelTextSize);
@@ -187,14 +190,18 @@ class BarChart{
             pop();
         } else if (this.chartType == "Stacked") {
             translate(gap, 0);
-            console.log(maxVal)
             let h;
+            maxVal = maxVal * 2
             for (let i = 0; i < numberOfBars; i++) {
                 let col = this.data[i];
-                fill(this.barColour[0]);
-                rect(0, 0, this.barWidth, -sepVal[1][i] * scale);
-                fill(this.barColour[1]);
-                rect(0, 0, this.barWidth, -sepVal[0][i] * scale)            
+                push();
+                for (let j = 0; j < sepVal.length; j++) {
+                    fill(this.barColour[j]);
+                    rect(0, 0, this.barWidth, -(sepVal[j][i] * scale) / 2)
+                    translate(0, -(sepVal[j][i] * scale) / 2);
+                }      
+                pop();
+  
 
                 // draws labels
                 textSize(this.labelTextSize);
@@ -213,6 +220,7 @@ class BarChart{
 
             // this draws the vertical elements
             let tickGap = this.chartHeight / 5
+            // maxVal = floor(maxVal)
             let tickValue = maxVal / 5
             for (let i = 0; i <= 5; i++) {
                 stroke(255);
