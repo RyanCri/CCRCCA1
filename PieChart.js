@@ -69,7 +69,6 @@ class PieChart{
 
         let lastAngle = 0;
         for (let i = 0; i < slices.length; i++) {
-            // let gray = map(i, 0, slices.length, 0, 255)
             strokeWeight(this.strokeWeight)
             stroke(255)
             fill(this.sliceColours[i]);
@@ -87,6 +86,7 @@ class PieChart{
         text(this.title, 0, 0)
         pop();
         
+        // draws legend and legend boxes
         rectMode(CENTER)
         translate(this.chartRadius / 2, this.chartRadius * 2 + 50)
         for (i = 0; i < this.sliceData.length; i++) {
