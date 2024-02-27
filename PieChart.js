@@ -1,23 +1,36 @@
 class PieChart{
-    constructor(obj) {
-        this.data = obj.data
-        this.sliceValue = obj.sliceValue
-        this.sliceData = obj.sliceData
-        this.sliceSource = obj.sliceSource
-        this.chartRadius = obj.chartRadius
-        this.xPos = obj.xPos
-        this.yPos = obj.yPos
-        this.sliceColours = obj.sliceColours
-        this.sliceValDisplay = obj.sliceValDisplay
-        this.title = obj.title;
+    constructor(options) {
 
-        this.strokeWeight = obj.sW;
-        this.labelTextSize = obj.labelTextSize;
-        this.labelPadding = obj.labelPadding;
-        this.labelColour = obj.labelColour;
-        this.labelRotation = obj.labelRotation;
-        this.chartType = obj.chartType;
-        this.legend = obj.legend;
+        // default values
+        const defaults = {
+            chartRadius:200,
+            sliceColours:["#157F1F", "#4CB963", "#A0EADE", "#5C6784", "#1D263B"],
+            sliceValDisplay:true,
+            strokeWeight:2,
+            legendTextSize: 20,
+            legendColour: 255,
+            legendStroke: 255,
+            legendRotation: 0,
+            titleSize: 20,
+        }
+
+        let opts = Object.assign({}, defaults, options);
+        this.data = opts.data
+        this.sliceValue = opts.sliceValue
+        this.sliceData = opts.sliceData
+        this.sliceSource = opts.sliceSource
+        this.chartRadius = opts.chartRadius
+        this.xPos = opts.xPos
+        this.yPos = opts.yPos
+        this.sliceColours = opts.sliceColours
+        this.sliceValDisplay = opts.sliceValDisplay
+        this.title = opts.title;
+        this.strokeWeight = opts.sW;
+        this.legendTextSize = opts.legendTextSize;
+        this.legendColour = opts.legendColour;
+        this.legendStroke = opts.legendStroke;
+        this.legendRotation = opts.legendRotation
+        this.titleSize = opts.titleSize
     }
 
     render(){
@@ -57,6 +70,8 @@ class PieChart{
         let lastAngle = 0;
         for (let i = 0; i < slices.length; i++) {
             // let gray = map(i, 0, slices.length, 0, 255)
+            strokeWeight(this.strokeWeight)
+            stroke(255)
             fill(this.sliceColours[i]);
             arc(this.chartRadius, this.chartRadius, this.chartRadius * 2, this.chartRadius * 2, lastAngle, lastAngle + angles[i])
             lastAngle += angles[i]
@@ -67,8 +82,8 @@ class PieChart{
         translate(this.chartRadius, - 70);
         textAlign(CENTER)
         noStroke()
-        fill(255)
-        textSize(20)
+        fill(this.legendColour)
+        textSize(this.titleSize)
         text(this.title, 0, 0)
         pop();
         
@@ -77,11 +92,11 @@ class PieChart{
         for (i = 0; i < this.sliceData.length; i++) {
             textAlign(LEFT)
             fill(this.sliceColours[i])
-            stroke(255)
+            stroke(this.legendStroke)
             rect(0, 0, 25)
             noStroke()
-            textSize(20)
-            fill(255)
+            textSize(this.legendTextSize)
+            fill(this.legendColour)
             text(this.sliceData[i], 50, 10)
             if (this.sliceValDisplay == true) {
                 textAlign(RIGHT)

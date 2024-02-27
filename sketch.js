@@ -21,7 +21,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(2400, 1400);
+  createCanvas(2400, 1600);
   background(30)
   
   numHLY = hlyData.rows.length;
@@ -42,7 +42,9 @@ function setup() {
 
   bothHLY = cleanHLY.filter(sex => sex.Sex == "Both sexes");
   combinedHLY = cleanHLY.filter(sex => sex.Sex == "Male" || sex.Sex == "Female");
-  irelandST = cleanST.filter(country => country.Countries == "Ireland")
+  irelandST = cleanST.filter(country => country.Countries == "Ireland");
+  q3Ireland = cleanAirport.filter(quarter => quarter.Quarter == "2023Q3" && quarter.Airports != "Dublin");
+  // q3Ireland = q3Ireland.pop(q3Ireland.sort())
 
   // used for stacked bar chart adn 100%
   let Male;
@@ -54,17 +56,17 @@ function setup() {
   for (i = 0; i < irelandST.length; i += 3) {
     prim = irelandST[i];
     sec = irelandST[i+2];
-    yupSendIt = [prim, sec];
+    s = [prim, sec];
 
-    cleanIrelandST.push(yupSendIt);
+    cleanIrelandST.push(s);
   }
 
   for (i = 0; i < combinedHLY.length; i += 2) {
     Male = combinedHLY[i];
     Female = combinedHLY[i+1];
-    yupSendIt = [Male, Female];
+    s = [Male, Female]
 
-    cleanCombinedHLY.push(yupSendIt);
+    cleanCombinedHLY.push(s);
   }
 
   vBarChart = {
@@ -158,7 +160,7 @@ function setup() {
     chartWidth:400,
     chartHeight:400,
     xPos:700,
-    yPos:1150,
+    yPos:1350,
     axisColour:"#ffffff",
     barColour:"#ffff00",
     sW:2,
@@ -178,7 +180,7 @@ function setup() {
     chartWidth:400,
     chartHeight:400,
     xPos:1300,
-    yPos:1150,
+    yPos:1350,
     axisColour:"#ffffff",
     barColour:["#ff0f0f", "#1e00ff"],
     sW:2,
@@ -199,7 +201,7 @@ function setup() {
     chartWidth:400,
     chartHeight:400,
     xPos:100,
-    yPos:1150,
+    yPos:1350,
     axisColour:"#ffffff",
     barColour:["#ff0f0f", "#1e00ff"],
     compareBarColour:"#1e00ff",
@@ -220,11 +222,36 @@ function setup() {
     sliceData:["Cork", "Dublin", "Kerry", "Knock", "Shannon"],
     sliceSource:"Airports",
     chartRadius:200,
-    xPos:1850,
+    xPos:1900,
     yPos:150,
     sliceColours:["#157F1F", "#4CB963", "#A0EADE", "#5C6784", "#1D263B"],
     sliceValDisplay:true,
-    title:"Passengers, Q1 to Q3 of 2023, through Irish airports"
+    title:"Passengers, Q1 to Q3 of 2023, through Irish airports",
+    sW: 3,
+    legendTextSize: 20,
+    legendColour: 255,
+    legendStroke: 255,
+    legendRotation: 0,
+  }
+
+  hBarChartAirport = {
+    data:q3Ireland,
+    yValue:"Passengers (Number)",
+    xValue:"Airports",
+    chartWidth:400,
+    chartHeight:400,
+    xPos:1900,
+    yPos:1350,
+    axisColour:"#ffffff",
+    barColour:"#ffff00",
+    sW:2,
+    barWidth:15,
+    labelTextSize:20,
+    labelPadding:10,
+    labelColour:"#ffffff",
+    labelRotation:PI/2,
+    chartType:"Horizontal",
+    title:"Passengers through Irish airports in Q3 of 2023,\nDublin excluded"
   }
 
   charts.push(new BarChart(vBarChart));
@@ -240,6 +267,8 @@ function setup() {
   charts.push(new BarChart(gBarChart));
 
   charts.push(new PieChart(pieChart));
+
+  charts.push(new BarChart(hBarChartAirport))
 
   charts.forEach(chart => chart.render());
 }

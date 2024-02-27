@@ -104,8 +104,9 @@ class BarChart{
             scale = this.chartWidth / maxVal;
             gap = (this.chartHeight -(numberOfBars * this.barWidth)) / (numberOfBars + 1);
         } else if (this.chartType == "Grouped" || this.chartType == "Stacked" || this.chartType == "100%") {
-            maxVal = floor(max(allVal));
-            scale = this.chartHeight / floor(maxVal);
+            // maxVal = floor(max(allVal));
+            maxVal = max(allVal)
+            scale = this.chartHeight / maxVal;
             // scale = this.chartHeight / maxVal;
 
             gap = (this.chartWidth -(numberOfBars * this.barWidth)) / (numberOfBars + 1);
@@ -141,7 +142,8 @@ class BarChart{
             // this draws the vertical elements
             let tickGap = this.chartHeight / 5
             let tickValue = maxVal / 5
-            rotate(PI/2)
+            angleMode(RADIANS)
+            rotate(PI / 2)
             for (let i = 0; i <= 5; i++) {
                 stroke(255);
                 line(0, -i*tickGap, 20, -i*tickGap)
