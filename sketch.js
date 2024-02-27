@@ -155,7 +155,7 @@ function setup() {
     data:cleanCombinedHLY,
     yValue:"VALUE",
     xValue:"Year",
-    chartWidth:400,
+    chartWidth:450,
     chartHeight:400,
     xPos:1300,
     yPos:1350,
