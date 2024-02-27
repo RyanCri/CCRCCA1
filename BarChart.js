@@ -97,7 +97,16 @@ class BarChart{
         if (this.chartType == "Horizontal") {
             scale = this.chartWidth / maxVal;
             gap = (this.chartHeight -(numberOfBars * this.barWidth)) / (numberOfBars + 1);
-        } else if (this.chartType == "Grouped" || this.chartType == "Stacked" || this.chartType == "100%") {
+        } else if (this.chartType == "Stacked" || this.chartType == "100%") {
+            let h = []
+            for (i = 0; i < sepVal[0].length; i++) {
+                h.push(+sepVal[0][i] + +sepVal[1][i])
+            }
+            console.log(h)
+            maxVal = max(h)
+            scale = this.chartHeight / maxVal;
+            gap = (this.chartWidth -(numberOfBars * this.barWidth)) / (numberOfBars + 1);
+        } else if (this.chartType == "Grouped") {
             maxVal = max(allVal)
             scale = this.chartHeight / maxVal;
             gap = (this.chartWidth -(numberOfBars * this.barWidth)) / (numberOfBars + 1);
@@ -184,14 +193,16 @@ class BarChart{
         } else if (this.chartType == "Stacked") {
             translate(gap, 0);
             let h;
-            maxVal = maxVal * 2
+            maxVal = maxVal
             for (let i = 0; i < numberOfBars; i++) {
                 let col = this.data[i];
                 push();
                 for (let j = 0; j < sepVal.length; j++) { // this code is not hardcoded but the nature of sepVal limits bars to only 2. Bad.
                     fill(this.barColour[j]);
-                    rect(0, 0, this.barWidth, -(sepVal[j][i] * scale) / 2)
-                    translate(0, -(sepVal[j][i] * scale) / 2); // translates up above current bar
+                    rect(0, 0, this.barWidth, -(sepVal[j][i] * scale))
+                    translate(0, -(sepVal[j][i] * scale)); // translates up above current bar
+                    console.log(maxVal)
+                    console.log(sepVal[j][i])
                 }      
                 pop();
   
