@@ -102,7 +102,6 @@ class BarChart{
             for (i = 0; i < sepVal[0].length; i++) {
                 h.push(+sepVal[0][i] + +sepVal[1][i])
             }
-            console.log(h)
             maxVal = max(h)
             scale = this.chartHeight / maxVal;
             gap = (this.chartWidth -(numberOfBars * this.barWidth)) / (numberOfBars + 1);
@@ -201,8 +200,6 @@ class BarChart{
                     fill(this.barColour[j]);
                     rect(0, 0, this.barWidth, -(sepVal[j][i] * scale))
                     translate(0, -(sepVal[j][i] * scale)); // translates up above current bar
-                    console.log(maxVal)
-                    console.log(sepVal[j][i])
                 }      
                 pop();
   
@@ -265,9 +262,9 @@ class BarChart{
             pop();
 
             // this draws the vertical elements
-            let tickGap = this.chartHeight / 4
-            let tickValue = 100 / 4
-            for (let i = 0; i <= 4; i++) {
+            let tickGap = this.chartHeight / 10
+            let tickValue = 100 / 10
+            for (let i = 0; i <= 10; i++) {
                 stroke(255);
                 line(0, -i*tickGap, -20, -i*tickGap)
                 textSize(this.labelTextSize)
@@ -286,7 +283,6 @@ class BarChart{
                 let col = this.data[i];
                 fill(this.barColour[0]);
                 rect(0, 0, this.barWidth, -(totals[i] - stack1[i]) * scale); // take away bottom value from total value to give left value
-                // console.log(totals[i])
                 translate(this.barWidth, 0)
                 fill(this.barColour[1]); 
                 rect(0, 0, this.barWidth, -stack1[i] * scale) // draw right value 
@@ -333,7 +329,6 @@ class BarChart{
             beginShape(LINES);
             let points = [] // empty points array
             points[0] = createVector(gap, -this.data[0][this.yValue] * scale); // create a vector at point 1
-            // console.log(points[0])
             vertex(gap, -this.data[0][this.yValue] * scale) // create a vertex at point 1
             for (let i = 1; i < numberOfBars; i++) { // start for loop on 1...
                 fill(this.barColour);

@@ -11,6 +11,7 @@ let bothHLY = [];
 let cleanCombinedHLY = []
 let cleanIrelandST = []
 let cleanAirport = []
+let cleanBirthDeath = []
 
 let numHLY;
 
@@ -18,15 +19,17 @@ function preload() {
   hlyData = loadTable("data/HLY.csv", "csv", "header");
   studentsTeachers = loadTable("data/studentsToTeachers.csv", "csv", "header");
   airportData = loadTable("data/airportPassenger.csv", "csv", "header");
+  birthDeathData = loadTable("data/birthDeath.csv", "csv", "header");
 }
 
 function setup() {
-  createCanvas(2400, 1600);
+  createCanvas(2400, 2200);
   background(30)
   
   numHLY = hlyData.rows.length;
   numST = studentsTeachers.rows.length;
   numAirport = airportData.rows.length;
+  numBirthDeath = birthDeathData.rows.length;
 
   for(let i = 0; i < numHLY; i++) {
     cleanHLY.push(hlyData.rows[i].obj)
@@ -40,10 +43,16 @@ function setup() {
     cleanAirport.push(airportData.rows[i].obj);
   }
 
+  for(let i = 0; i < numBirthDeath; i++) {
+    cleanBirthDeath.push(birthDeathData.rows[i].obj);
+  }
+
   bothHLY = cleanHLY.filter(sex => sex.Sex == "Both sexes");
   combinedHLY = cleanHLY.filter(sex => sex.Sex == "Male" || sex.Sex == "Female");
   irelandST = cleanST.filter(country => country.Countries == "Ireland");
   q3Ireland = cleanAirport.filter(quarter => quarter.Quarter == "2023Q3" && quarter.Airports != "Dublin");
+  births = cleanBirthDeath.filter(birth => birth.Births == "TRUE");
+  deaths = cleanBirthDeath.filter(death => death.Deaths == "TRUE")
   // q3Ireland = q3Ireland.pop(q3Ireland.sort())
 
   // used for stacked bar chart adn 100%
@@ -67,6 +76,16 @@ function setup() {
     s = [Male, Female]
 
     cleanCombinedHLY.push(s);
+  }
+
+  let birthDeath = [];
+
+  for (i = 0; i < births.length; i ++) {
+    let birth = births[i];
+    let death = deaths[i];
+    s = [birth, death]
+
+    birthDeath.push(s)
   }
 
   vBarChart = {
@@ -232,6 +251,51 @@ function setup() {
     title:"Passengers through Irish airports in Q3 of 2023,\nDublin excluded"
   }
 
+  bdSBarChart = {
+    data:birthDeath,
+    yValue:"VALUE",
+    xValue:"Quarter",
+    chartWidth:400,
+    chartHeight:400,
+    xPos:100,
+    yPos:2050,
+    axisColour:"#ffffff",
+    barColour:["#FFBA49", "#20A39E"],
+    compareBarColour:"#1e00ff",
+    sW:2,
+    barWidth:15,
+    labelTextSize:20,
+    labelPadding:10,
+    labelColour:"#ffffff",
+    labelRotation:PI/2,
+    chartType:"Stacked",
+    title:"Number of students to teachers in Ireland",
+    legend:["Births", "Deaths"]
+  }
+
+  bd100BarChart = {
+    data:birthDeath,
+    yValue:"VALUE",
+    xValue:"Quarter",
+    chartWidth:400,
+    chartHeight:400,
+    xPos:700,
+    yPos:2050,
+    axisColour:"#ffffff",
+    barColour:["#20A39E", "#FFBA49"],
+    compareBarColour:"#1e00ff",
+    sW:2,
+    barWidth:15,
+    labelTextSize:20,
+    labelPadding:10,
+    labelColour:"#ffffff",
+    labelRotation:PI/2,
+    chartType:"100%",
+    title:"Number of students to teachers in Ireland",
+    legend:["Deaths", "Births"]
+  }
+
+  console.log(birthDeath)
   charts.push(new BarChart(vBarChart));
 
   charts.push(new BarChart(hBarChart));
@@ -247,6 +311,11 @@ function setup() {
   charts.push(new PieChart(pieChart));
 
   charts.push(new BarChart(hBarChartAirport))
+
+  charts.push(new BarChart(bdSBarChart))
+
+  charts.push(new BarChart(bd100BarChart))
+
 
   charts.forEach(chart => chart.render());
 }
