@@ -260,7 +260,7 @@ function setup() {
     xPos:100,
     yPos:2050,
     axisColour:"#ffffff",
-    barColour:["#FFBA49", "#20A39E"],
+    barColour:["#9B1D20", "#BFAE48"],
     compareBarColour:"#1e00ff",
     sW:2,
     barWidth:15,
@@ -269,7 +269,7 @@ function setup() {
     labelColour:"#ffffff",
     labelRotation:PI/2,
     chartType:"Stacked",
-    title:"Number of students to teachers in Ireland",
+    title:"Births vs Deaths in Ireland during 2022",
     legend:["Births", "Deaths"]
   }
 
@@ -282,7 +282,7 @@ function setup() {
     xPos:700,
     yPos:2050,
     axisColour:"#ffffff",
-    barColour:["#20A39E", "#FFBA49"],
+    barColour:["#08A045", "#0B6E4F"],
     compareBarColour:"#1e00ff",
     sW:2,
     barWidth:15,
@@ -291,7 +291,7 @@ function setup() {
     labelColour:"#ffffff",
     labelRotation:PI/2,
     chartType:"100%",
-    title:"Number of students to teachers in Ireland",
+    title:"Ratio of births to deaths in Ireland during 2022",
     legend:["Deaths", "Births"]
   }
 
