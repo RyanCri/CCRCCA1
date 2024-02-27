@@ -38,45 +38,38 @@ class BarChart{
         text(this.title, 0, 0)
         pop();
 
-        let numberOfBars;
+        let numberOfBars; // number of bars in bar chart
 
-        let totals = this.data.map((row => +row[this.yValue]));
+        let totals = this.data.map((row => +row[this.yValue])); // the totals for the passed in data
         let scale;
         let gap;
 
         let colTotal;
-        let stack1 = [];
-        let allVal = [];
-        let sepVal = [[],[]];
+        let stack1 = []; // bottom of stacked bar chart
+        let allVal = []; // array of all values in data
+        let sepVal = [[],[]]; // values separated by headers, i.e. "male" and "female"
 
-        let labels = this.data.map(d => d[this.xValue])
+        let labels = this.data.map(d => d[this.xValue]) // labels
 
         if (this.chartType == "Stacked" || this.chartType == "100%" || this.chartType == "Grouped") {
-            // console.log(this.data)
-
-
-            totals = [];
+            totals = []; // totals and labels reset for these chart types
             labels = [];
             numberOfBars = this.data.length
-            for (i = 0; i<numberOfBars; i++) {
-                for (let j = 0; j < this.data[i].length; j++) {
-                    allVal.push(this.data[i][j][this.yValue])
+            for (i = 0; i<numberOfBars; i++) { // for every bar...
+                for (let j = 0; j < this.data[i].length; j++) { // for the 2 headers that make up 1 bar...
+                    allVal.push(this.data[i][j][this.yValue]) // push the values into 
 
-                    sepVal[j].push(this.data[i][j][this.yValue])
-                    // console.log(sepVal)
+                    sepVal[j].push(this.data[i][j][this.yValue]) // pushes the values into separate arrays to keep track of them
                 }
 
-                // console.log(this.data[i])
-                colTotal = this.data[i].map((row => +row[this.yValue]))
-                // allVal.push(colTotal[i]);
-                stack1.push(colTotal[0])
-                labels.push(this.data[i][0][this.xValue])
+                colTotal = this.data[i].map((row => +row[this.yValue])) // gives the total value of the bar
+                stack1.push(colTotal[0]) // bottom value of bar
+                labels.push(this.data[i][0][this.xValue]) // labels
                 let total = 0;
                 for (let j = 0; j < colTotal.length; j++) {
                     total += colTotal[j]
                 }
-                // let total = colTotal[0] + colTotal[1];
-                totals.push(total)
+                totals.push(total) // array of the totals
             }
 
             // this code draws the legend with the squares and colours and names
@@ -104,11 +97,8 @@ class BarChart{
             scale = this.chartWidth / maxVal;
             gap = (this.chartHeight -(numberOfBars * this.barWidth)) / (numberOfBars + 1);
         } else if (this.chartType == "Grouped" || this.chartType == "Stacked" || this.chartType == "100%") {
-            // maxVal = floor(max(allVal));
             maxVal = max(allVal)
             scale = this.chartHeight / maxVal;
-            // scale = this.chartHeight / maxVal;
-
             gap = (this.chartWidth -(numberOfBars * this.barWidth)) / (numberOfBars + 1);
         } else {
             scale = this.chartHeight / maxVal;
