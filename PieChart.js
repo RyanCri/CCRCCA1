@@ -73,11 +73,12 @@ class PieChart{
             stroke(255)
             fill(this.sliceColours[i]);
             arc(this.chartRadius, this.chartRadius, this.chartRadius * 2, this.chartRadius * 2, lastAngle, lastAngle + angles[i])
+            // arc(x, y, w, h, start, stop)
             lastAngle += angles[i]
         }
 
         // labels and legend
-        push();
+        push(); // pushing for translation for title
         translate(this.chartRadius, - 70);
         textAlign(CENTER)
         noStroke()
@@ -93,12 +94,12 @@ class PieChart{
             textAlign(LEFT)
             fill(this.sliceColours[i])
             stroke(this.legendStroke)
-            rect(0, 0, 25)
+            rect(0, 0, 25) // rect is the colour preview beside label
             noStroke()
             textSize(this.legendTextSize)
             fill(this.legendColour)
             text(this.sliceData[i], 50, 10)
-            if (this.sliceValDisplay == true) {
+            if (this.sliceValDisplay == true) { // if you want values beside the labels in legend
                 textAlign(RIGHT)
                 text(totals[i], 250, 10)
             }

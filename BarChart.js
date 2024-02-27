@@ -29,7 +29,7 @@ class BarChart{
         line(0, 0, 0, -this.chartHeight);
         line(0, 0, this.chartWidth, 0);
 
-        push();
+        push(); // this push is for the title of the graph
         translate(this.chartWidth / 2, -this.chartHeight - 70);
         textAlign(CENTER)
         noStroke()
@@ -93,6 +93,7 @@ class BarChart{
 
         let maxVal = max(totals);
 
+        //calculates scale and gap of different bar charts
         if (this.chartType == "Horizontal") {
             scale = this.chartWidth / maxVal;
             gap = (this.chartHeight -(numberOfBars * this.barWidth)) / (numberOfBars + 1);
@@ -187,10 +188,10 @@ class BarChart{
             for (let i = 0; i < numberOfBars; i++) {
                 let col = this.data[i];
                 push();
-                for (let j = 0; j < sepVal.length; j++) {
+                for (let j = 0; j < sepVal.length; j++) { // this code is not hardcoded but the nature of sepVal limits bars to only 2. Bad.
                     fill(this.barColour[j]);
                     rect(0, 0, this.barWidth, -(sepVal[j][i] * scale) / 2)
-                    translate(0, -(sepVal[j][i] * scale) / 2);
+                    translate(0, -(sepVal[j][i] * scale) / 2); // translates up above current bar
                 }      
                 pop();
   
@@ -231,8 +232,8 @@ class BarChart{
             let h;
             for (let i = 0; i < numberOfBars; i++) {
                 let col = this.data[i];
-                percent = (stack1[i] / totals[i]) * 100;
-                h = (this.chartHeight / 100) * percent;
+                percent = (stack1[i] / totals[i]) * 100; // percentage of bottom value to total value
+                h = (this.chartHeight / 100) * percent; // gives percentage a height value
                 fill(this.barColour[0]);
                 rect(0, 0, this.barWidth, -this.chartHeight);
                 fill(this.barColour[1]);
@@ -273,11 +274,11 @@ class BarChart{
             for (let i = 0; i < numberOfBars; i++) {
                 let col = this.data[i];
                 fill(this.barColour[0]);
-                rect(0, 0, this.barWidth, -(totals[i] - stack1[i]) * scale);
+                rect(0, 0, this.barWidth, -(totals[i] - stack1[i]) * scale); // take away bottom value from total value to give left value
                 // console.log(totals[i])
                 translate(this.barWidth, 0)
-                fill(this.barColour[1]);
-                rect(0, 0, this.barWidth, -stack1[i] * scale)            
+                fill(this.barColour[1]); 
+                rect(0, 0, this.barWidth, -stack1[i] * scale) // draw right value 
 
                 // draws labels
                 textSize(this.labelTextSize);
@@ -310,27 +311,28 @@ class BarChart{
             }
 
             pop();
-        } else if (this.chartType == "Line") {
+        } else if (this.chartType == "Line") { // code for line graphs
             translate(-20, 0)
             push();
-            translate(-this.chartWidth + 20 + gap, 0);
+            translate(-this.chartWidth + 20 + gap, 0); // translate before beginShape as translate does not work in beginShape()
+            // if you don't translate here beginShape renders outside of chart
 
             strokeWeight(5)
-            fill(255)
+            stroke(this.barColour)
             beginShape(LINES);
-            let points = []
-            points[0] = createVector(gap, -this.data[0][this.yValue] * scale);
+            let points = [] // empty points array
+            points[0] = createVector(gap, -this.data[0][this.yValue] * scale); // create a vector at point 1
             // console.log(points[0])
-            vertex(gap, -this.data[0][this.yValue] * scale)
-            for (let i = 1; i < numberOfBars; i++) {
+            vertex(gap, -this.data[0][this.yValue] * scale) // create a vertex at point 1
+            for (let i = 1; i < numberOfBars; i++) { // start for loop on 1...
                 fill(this.barColour);
 
-                let prev = points[i-1];
-                let h = this.data[i][this.yValue] * scale;
-                let diff = h - (this.data[i-1][this.yValue] * scale)
-                points[i] = prev.add(createVector((this.barWidth + gap), (-diff)));
-                vertex(prev.x, prev.y);
-                vertex(points[i].x, points[i].y);
+                let prev = points[i-1]; // previous point is current point - 1
+                let h = this.data[i][this.yValue] * scale; // height of current point
+                let diff = h - (this.data[i-1][this.yValue] * scale) // vertical difference (y co-ord) between previous point and current point
+                points[i] = prev.add(createVector((this.barWidth + gap), (-diff))); // add vector between x and y of prev point and current point
+                vertex(prev.x, prev.y); // create vertex at previous point
+                vertex(points[i].x, points[i].y); // create vertex at current point
             }
             
             for (let i = 0; i < numberOfBars; i++) {
