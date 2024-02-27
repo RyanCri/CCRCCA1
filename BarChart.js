@@ -299,9 +299,9 @@ class BarChart{
             let tickGap = this.chartHeight / 5
             let tickValue = maxVal / 5
             for (let i = 0; i <= 5; i++) {
-                stroke(255);
+                stroke(127);
                 line(0, -i*tickGap, this.chartWidth, -i*tickGap)
-
+                fill(255)
                 line(0, -i*tickGap, -20, -i*tickGap)
                 textSize(this.labelTextSize)
                 textAlign(RIGHT, CENTER)
