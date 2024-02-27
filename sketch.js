@@ -10,20 +10,23 @@ let bothHLY = [];
 
 let cleanCombinedHLY = []
 let cleanIrelandST = []
+let cleanAirport = []
 
 let numHLY;
 
 function preload() {
   hlyData = loadTable("data/HLY.csv", "csv", "header");
   studentsTeachers = loadTable("data/studentsToTeachers.csv", "csv", "header");
+  airportData = loadTable("data/airportPassenger.csv", "csv", "header");
 }
 
 function setup() {
-  createCanvas(1800, 1400);
+  createCanvas(2400, 1400);
   background(30)
   
   numHLY = hlyData.rows.length;
   numST = studentsTeachers.rows.length;
+  numAirport = airportData.rows.length;
 
   for(let i = 0; i < numHLY; i++) {
     cleanHLY.push(hlyData.rows[i].obj)
@@ -31,6 +34,10 @@ function setup() {
 
   for(let i = 0; i < numST; i++) {
     cleanST.push(studentsTeachers.rows[i].obj)
+  }
+
+  for(let i = 0; i < numAirport; i++) {
+    cleanAirport.push(airportData.rows[i].obj);
   }
 
   bothHLY = cleanHLY.filter(sex => sex.Sex == "Both sexes");
@@ -207,6 +214,18 @@ function setup() {
     legend:["Prim.", "Sec."]
   }
 
+  pieChart = {
+    data:cleanAirport,
+    sliceValue:"Passengers (Number)",
+    sliceData:["Cork", "Dublin", "Kerry", "Knock", "Shannon"],
+    sliceSource:"Airports",
+    chartRadius:400,
+    xPos:1650,
+    yPos:-50,
+    sliceColours:["#157F1F", "#4CB963", "#A0EADE", "#5C6784", "#1D263B"],
+    
+  }
+
   charts.push(new BarChart(vBarChart));
 
   charts.push(new BarChart(hBarChart));
@@ -218,6 +237,8 @@ function setup() {
   charts.push(new BarChart(bBarChart));
 
   charts.push(new BarChart(gBarChart));
+
+  charts.push(new PieChart(pieChart));
 
   charts.forEach(chart => chart.render());
 }
