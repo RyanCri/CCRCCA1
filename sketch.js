@@ -219,11 +219,12 @@ function setup() {
     sliceValue:"Passengers (Number)",
     sliceData:["Cork", "Dublin", "Kerry", "Knock", "Shannon"],
     sliceSource:"Airports",
-    chartRadius:400,
-    xPos:1650,
-    yPos:-50,
+    chartRadius:200,
+    xPos:1850,
+    yPos:150,
     sliceColours:["#157F1F", "#4CB963", "#A0EADE", "#5C6784", "#1D263B"],
-    
+    sliceValDisplay:true,
+    title:"Passengers, Q1 to Q3 of 2023, through Irish airports"
   }
 
   charts.push(new BarChart(vBarChart));

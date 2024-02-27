@@ -8,17 +8,15 @@ class PieChart{
         this.xPos = obj.xPos
         this.yPos = obj.yPos
         this.sliceColours = obj.sliceColours
-        this.axisColour = obj.axisColour;
-        this.barColour = obj.barColour;
-        this.compareBarColour = obj.compareBarColour;
+        this.sliceValDisplay = obj.sliceValDisplay
+        this.title = obj.title;
+
         this.strokeWeight = obj.sW;
-        this.barWidth = obj.barWidth;
         this.labelTextSize = obj.labelTextSize;
         this.labelPadding = obj.labelPadding;
         this.labelColour = obj.labelColour;
         this.labelRotation = obj.labelRotation;
         this.chartType = obj.chartType;
-        this.title = obj.title;
         this.legend = obj.legend;
     }
 
@@ -60,8 +58,36 @@ class PieChart{
         for (let i = 0; i < slices.length; i++) {
             // let gray = map(i, 0, slices.length, 0, 255)
             fill(this.sliceColours[i]);
-            arc(this.chartRadius, this.chartRadius, this.chartRadius, this.chartRadius, lastAngle, lastAngle + angles[i])
+            arc(this.chartRadius, this.chartRadius, this.chartRadius * 2, this.chartRadius * 2, lastAngle, lastAngle + angles[i])
             lastAngle += angles[i]
+        }
+
+        // labels and legend
+        push();
+        translate(this.chartRadius, - 70);
+        textAlign(CENTER)
+        noStroke()
+        fill(255)
+        textSize(20)
+        text(this.title, 0, 0)
+        pop();
+        
+        rectMode(CENTER)
+        translate(this.chartRadius / 2, this.chartRadius * 2 + 50)
+        for (i = 0; i < this.sliceData.length; i++) {
+            textAlign(LEFT)
+            fill(this.sliceColours[i])
+            stroke(255)
+            rect(0, 0, 25)
+            noStroke()
+            textSize(20)
+            fill(255)
+            text(this.sliceData[i], 50, 10)
+            if (this.sliceValDisplay == true) {
+                textAlign(RIGHT)
+                text(totals[i], 250, 10)
+            }
+            translate(0, 40)
         }
         pop();
     }
