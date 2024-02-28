@@ -48,6 +48,9 @@ class BarChart{
         let stack1 = []; // bottom of stacked bar chart
         let allVal = []; // array of all values in data
         let sepVal = [[],[]]; // values separated by headers, i.e. "male" and "female"
+        let sepVal2 = [];
+
+        let bar = []
 
         let labels = this.data.map(d => d[this.xValue]) // labels
 
@@ -55,13 +58,20 @@ class BarChart{
             totals = []; // totals and labels reset for these chart types
             labels = [];
             numberOfBars = this.data.length
+            // console.log(this.data)
             for (i = 0; i<numberOfBars; i++) { // for every bar...
+                bar = []
                 for (let j = 0; j < this.data[i].length; j++) { // for the 2 headers that make up 1 bar...
                     allVal.push(this.data[i][j][this.yValue]) // push the values into 
 
-                    sepVal[j].push(this.data[i][j][this.yValue]) // pushes the values into separate arrays to keep track of them
+                    // sepVal[j].push(this.data[i][j][this.yValue]) // pushes the values into separate arrays to keep track of them
+                    
+                    bar.push((this.data[i][j][this.yValue]))
                 }
 
+                sepVal2.push(bar)
+                // console.log(sepVal)
+                // console.log(bar)
                 colTotal = this.data[i].map((row => +row[this.yValue])) // gives the total value of the bar
                 stack1.push(colTotal[0]) // bottom value of bar
                 labels.push(this.data[i][0][this.xValue]) // labels
@@ -70,6 +80,7 @@ class BarChart{
                     total += colTotal[j]
                 }
                 totals.push(total) // array of the totals
+                // console.log(totals)
             }
 
             // this code draws the legend with the squares and colours and names
@@ -99,16 +110,16 @@ class BarChart{
             gap = (this.chartHeight -(numberOfBars * this.barWidth)) / (numberOfBars + 1);
         } else if (this.chartType == "Stacked" || this.chartType == "100%") {
             let h = []
-            for (i = 0; i < sepVal[0].length; i++) {
-                h.push(+sepVal[0][i] + +sepVal[1][i])
+            for (i = 0; i < sepVal2[0].length; i++) {
+                h.push(+sepVal2[0][i] + +sepVal2[1][i] + +sepVal2[2][i])
             }
-            maxVal = max(h)
+            maxVal = max(totals)
             scale = this.chartHeight / maxVal;
             gap = (this.chartWidth -(numberOfBars * this.barWidth)) / (numberOfBars + 1);
         } else if (this.chartType == "Grouped") {
             maxVal = max(allVal)
             scale = this.chartHeight / maxVal;
-            gap = (this.chartWidth -(numberOfBars * this.barWidth)) / (numberOfBars + 1);
+            gap = (this.chartWidth -(numberOfBars * (this.barWidth*sepVal2[0].length))) / (numberOfBars + 1);
         } else {
             scale = this.chartHeight / maxVal;
             gap = (this.chartWidth -(numberOfBars * this.barWidth)) / (numberOfBars + 1);
@@ -196,10 +207,14 @@ class BarChart{
             for (let i = 0; i < numberOfBars; i++) {
                 let col = this.data[i];
                 push();
-                for (let j = 0; j < sepVal.length; j++) { // this code is not hardcoded but the nature of sepVal limits bars to only 2. Bad.
-                    fill(this.barColour[j]);
-                    rect(0, 0, this.barWidth, -(sepVal[j][i] * scale))
-                    translate(0, -(sepVal[j][i] * scale)); // translates up above current bar
+                for (let j = 0; j < sepVal2[0].length; j++) { // this code is not hardcoded but the nature of sepVal limits bars to only 2. Bad.
+                    if (j % 2 == 0) {
+                        fill(this.barColour[0]);
+                    } else {
+                        fill(this.barColour[1])
+                    }
+                    rect(0, 0, this.barWidth, -(sepVal2[i][j] * scale))
+                    translate(0, -(sepVal2[i][j] * scale)); // translates up above current bar
                 }      
                 pop();
   
@@ -239,14 +254,19 @@ class BarChart{
             let percent;
             let h;
             for (let i = 0; i < numberOfBars; i++) {
-                let col = this.data[i];
-                percent = (stack1[i] / totals[i]) * 100; // percentage of bottom value to total value
-                h = (this.chartHeight / 100) * percent; // gives percentage a height value
-                fill(this.barColour[0]);
-                rect(0, 0, this.barWidth, -this.chartHeight);
-                fill(this.barColour[1]);
-                rect(0, 0, this.barWidth, -h)            
-                // draws labels
+                push();
+                console.log()
+                for (let j = 0; j < sepVal2[0].length; j++) { // this code is not hardcoded but the nature of sepVal limits bars to only 2. Bad.
+                    if (j % 2 == 0) {
+                        fill(this.barColour[0]);
+                    } else {
+                        fill(this.barColour[1])
+                    }
+                    scale = this.chartHeight / totals[i];
+                    rect(0, 0, this.barWidth, -(sepVal2[i][j] * scale))
+                    translate(0, -(sepVal2[i][j] * scale)); // translates up above current bar
+                }      
+                pop();
                 textSize(this.labelTextSize);
                 push();
                 noStroke();
@@ -276,16 +296,32 @@ class BarChart{
 
             pop();
         } else if (this.chartType == "Grouped") {
-            gap = gap /2;
+            // gap = gap /2;
+            console.log(gap)
             translate(gap, 0);
             let h;
             for (let i = 0; i < numberOfBars; i++) {
                 let col = this.data[i];
-                fill(this.barColour[0]);
-                rect(0, 0, this.barWidth, -(totals[i] - stack1[i]) * scale); // take away bottom value from total value to give left value
-                translate(this.barWidth, 0)
-                fill(this.barColour[1]); 
-                rect(0, 0, this.barWidth, -stack1[i] * scale) // draw right value 
+                // fill(this.barColour[0]);
+                // rect(0, 0, this.barWidth, -(totals[i] - stack1[i]) * scale); // take away bottom value from total value to give left value
+                // translate(this.barWidth, 0)
+                // fill(this.barColour[1]); 
+                // rect(0, 0, this.barWidth, -stack1[i] * scale) // draw right value 
+                push();
+                // console.log(sepVal2)
+                for (let j = 0; j < sepVal2[0].length; j++) { // this code is not hardcoded but the nature of sepVal limits bars to only 2. Bad.
+                    if (j % 2 == 0) {
+                        fill(this.barColour[0]);
+                    } else {
+                        fill(this.barColour[1])
+                    }
+                    rect(0, 0, this.barWidth, -(sepVal2[i][j] * scale))
+                    translate(this.barWidth, 0); // translates up above current bar
+                }      
+                translate(gap + this.barWidth, 0);
+
+                pop();
+                
 
                 // draws labels
                 textSize(this.labelTextSize);
@@ -298,7 +334,8 @@ class BarChart{
                 text (labels[i], this.labelPadding, 0)
                 pop();
 
-                translate(gap+this.barWidth, 0);
+                console.log(sepVal)
+                translate(gap + (this.barWidth*sepVal2[0].length), 0);
             }
             pop();
 
@@ -336,7 +373,7 @@ class BarChart{
                 let prev = points[i-1]; // previous point is current point - 1
                 let h = this.data[i][this.yValue] * scale; // height of current point
                 let diff = h - (this.data[i-1][this.yValue] * scale) // vertical difference (y co-ord) between previous point and current point
-                points[i] = prev.add(createVector((this.barWidth + gap), (-diff))); // add vector between x and y of prev point and current point
+                points[i] = prev.add(createVector((this.barWidth + gap), (-diff))); // create vector at current point by adding to previous vector
                 vertex(prev.x, prev.y); // create vertex at previous point
                 vertex(points[i].x, points[i].y); // create vertex at current point
             }

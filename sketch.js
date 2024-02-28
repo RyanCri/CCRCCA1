@@ -174,7 +174,7 @@ function setup() {
     data:cleanCombinedHLY,
     yValue:"VALUE",
     xValue:"Year",
-    chartWidth:450,
+    chartWidth:800,
     chartHeight:400,
     xPos:1300,
     yPos:1350,
@@ -200,7 +200,7 @@ function setup() {
     xPos:100,
     yPos:1350,
     axisColour:"#ffffff",
-    barColour:["#FFBA49", "#20A39E"],
+    barColour:["#FFBA49", "#20A39E", "#cc55ff", "#20A39E"],
     compareBarColour:"#1e00ff",
     sW:2,
     barWidth:40,
@@ -238,7 +238,7 @@ function setup() {
     chartWidth:400,
     chartHeight:400,
     xPos:1900,
-    yPos:1350,
+    yPos:2050,
     axisColour:"#ffffff",
     barColour:"#E3B505",
     sW:2,
@@ -260,7 +260,7 @@ function setup() {
     xPos:100,
     yPos:2050,
     axisColour:"#ffffff",
-    barColour:["#9B1D20", "#BFAE48"],
+    barColour:["#9B1D20", "#BFAE48", "#BFAE48"],
     compareBarColour:"#1e00ff",
     sW:2,
     barWidth:40,
@@ -292,10 +292,9 @@ function setup() {
     labelRotation:PI/2,
     chartType:"100%",
     title:"Ratio of births to deaths in Ireland during 2022",
-    legend:["Deaths", "Births"]
+    legend:["Births", "Deaths"]
   }
 
-  console.log(birthDeath)
   charts.push(new BarChart(vBarChart));
 
   charts.push(new BarChart(hBarChart));
