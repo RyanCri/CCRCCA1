@@ -11,6 +11,7 @@ class BarChart{
             labelTextSize:20,
             labelPadding:10,
             labelColour:"#ffffff",
+            titleSize:25,
             labelRotation:PI/2,
         }
         
@@ -32,6 +33,7 @@ class BarChart{
         this.labelColour = opts.labelColour;
         this.labelRotation = opts.labelRotation;
         this.chartType = opts.chartType;
+        this.titleSize = opts.titleSize;
         this.title = opts.title;
         this.legend = opts.legend;
     }
@@ -49,7 +51,7 @@ class BarChart{
         textAlign(CENTER)
         noStroke()
         fill(255)
-        textSize(20)
+        textSize(this.titleSize)
         text(this.title, 0, 0)
         pop();
 
@@ -306,8 +308,6 @@ class BarChart{
 
             pop();
         } else if (this.chartType == "Grouped") {
-            // gap = gap /2;
-            console.log(gap)
             translate(gap, 0);
             let h;
             for (let i = 0; i < numberOfBars; i++) {
