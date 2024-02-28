@@ -1,24 +1,39 @@
 class BarChart{
-    constructor(obj) {
-        this.data = obj.data
-        this.yValue = obj.yValue
-        this.xValue = obj.xValue
-        this.chartWidth = obj.chartWidth
-        this.chartHeight = obj.chartHeight
-        this.xPos = obj.xPos
-        this.yPos = obj.yPos
-        this.axisColour = obj.axisColour;
-        this.barColour = obj.barColour;
-        this.compareBarColour = obj.compareBarColour;
-        this.strokeWeight = obj.sW;
-        this.barWidth = obj.barWidth;
-        this.labelTextSize = obj.labelTextSize;
-        this.labelPadding = obj.labelPadding;
-        this.labelColour = obj.labelColour;
-        this.labelRotation = obj.labelRotation;
-        this.chartType = obj.chartType;
-        this.title = obj.title;
-        this.legend = obj.legend;
+    constructor(options) {
+        // default values
+        const defaults = {
+            chartWidth:400,
+            chartHeight:400,
+            axisColour:"#ffffff",
+            barColour:["#FFBA49", "#20A39E", "#cc55ff", "#20A39E"],
+            sW:2,
+            barWidth:40,
+            labelTextSize:20,
+            labelPadding:10,
+            labelColour:"#ffffff",
+            labelRotation:PI/2,
+        }
+        
+        let opts = Object.assign({}, defaults, options);
+        this.data = opts.data
+        this.yValue = opts.yValue
+        this.xValue = opts.xValue
+        this.chartWidth = opts.chartWidth
+        this.chartHeight = opts.chartHeight
+        this.xPos = opts.xPos
+        this.yPos = opts.yPos
+        this.axisColour = opts.axisColour;
+        this.barColour = opts.barColour;
+        this.compareBarColour = opts.compareBarColour;
+        this.strokeWeight = opts.sW;
+        this.barWidth = opts.barWidth;
+        this.labelTextSize = opts.labelTextSize;
+        this.labelPadding = opts.labelPadding;
+        this.labelColour = opts.labelColour;
+        this.labelRotation = opts.labelRotation;
+        this.chartType = opts.chartType;
+        this.title = opts.title;
+        this.legend = opts.legend;
     }
 
     render(){
@@ -47,7 +62,6 @@ class BarChart{
         let colTotal;
         let stack1 = []; // bottom of stacked bar chart
         let allVal = []; // array of all values in data
-        let sepVal = [[],[]]; // values separated by headers, i.e. "male" and "female"
         let sepVal2 = [];
 
         let bar = []
@@ -63,15 +77,11 @@ class BarChart{
                 bar = []
                 for (let j = 0; j < this.data[i].length; j++) { // for the 2 headers that make up 1 bar...
                     allVal.push(this.data[i][j][this.yValue]) // push the values into 
-
-                    // sepVal[j].push(this.data[i][j][this.yValue]) // pushes the values into separate arrays to keep track of them
-                    
                     bar.push((this.data[i][j][this.yValue]))
                 }
 
                 sepVal2.push(bar)
-                // console.log(sepVal)
-                // console.log(bar)
+
                 colTotal = this.data[i].map((row => +row[this.yValue])) // gives the total value of the bar
                 stack1.push(colTotal[0]) // bottom value of bar
                 labels.push(this.data[i][0][this.xValue]) // labels
@@ -334,7 +344,6 @@ class BarChart{
                 text (labels[i], this.labelPadding, 0)
                 pop();
 
-                console.log(sepVal)
                 translate(gap + (this.barWidth*sepVal2[0].length), 0);
             }
             pop();
